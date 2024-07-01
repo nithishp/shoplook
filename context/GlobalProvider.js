@@ -1,0 +1,15 @@
+import { createContext,useContext,useState,useEffect } from "react";
+const GlobalContext = createContext()
+export const useGlobalContext = () => useContext(GlobalContext)
+const GlobalProvider = ({childern}) =>{
+    return(
+
+        <GlobalContext.Provider
+            value={{
+                
+            }}
+        >
+            {childern}
+        </GlobalContext.Provider>
+    )
+}
