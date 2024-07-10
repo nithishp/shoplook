@@ -1,7 +1,10 @@
 import { View, Text,Image } from 'react-native'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import {Tabs,Redirect} from 'expo-router'
 import {icons} from '../../constants'
+import { UserLocationContext } from '../../context/userLocationContext'
+import * as Location from 'expo-location';
+
 
 const TabIcon = ({icon,color,name,focused}) =>{
   return(
@@ -13,9 +16,35 @@ const TabIcon = ({icon,color,name,focused}) =>{
 }
 
 const TabsLayout = () => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location)
+      setLocation(location.coords);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
   return (
     <>
-      <Tabs
+    <UserLocationContext.Provider value={{location,setLocation}}>
+      
+    <Tabs
       screenOptions={{
         tabBarShowLabel:false,
         tabBarActiveTintColor:'#FFA001',
@@ -82,7 +111,22 @@ const TabsLayout = () => {
               
           )
         }}/>
+
+<Tabs.Screen name='MapView' options={{
+          title:"Map",
+          headerShown: false,
+          tabBarIcon:({color,focused})=>(
+              <TabIcon 
+                icon={icons.map}
+                color={color}
+                name ="Map"
+                focused={focused}
+              />
+              
+          )
+        }}/>
       </Tabs>
+    </UserLocationContext.Provider>
     </>
   )
 }

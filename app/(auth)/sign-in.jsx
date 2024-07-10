@@ -5,7 +5,8 @@ import{images} from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link,router } from 'expo-router'
-import { signIn } from '../../lib/appwrite'
+import { signIn,signOut,getCurrentUser } from '../../lib/appwrite'
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 
 const SignIn = () => {
@@ -14,22 +15,32 @@ const SignIn = () => {
         password:''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const submit = async() =>{
-        
-        if(!form.email || !form.password ){
-            Alert.alert('Error','Please fill all the fields')
-        }
-        setIsSubmitting(true)
-        try {
-        await signIn(form.email,form.password)
-        router.replace('/home')
-        } catch (error) {
-            Alert.alert('Error',error.message)
-            
-        }finally{
-            setIsSubmitting(false)
-        }
+    const { setUser, setIsLogged } = useGlobalContext();
+    const deleteSession = async() =>{
+        const session = await signOut()
+        setUser(null)
     }
+    const submit = async () => {
+        if (form.email === "" || form.password === "") {
+          Alert.alert("Error", "Please fill in all fields");
+        }
+    
+        setIsSubmitting(true);
+    
+        try {
+          await signIn(form.email, form.password);
+          const result = await getCurrentUser();
+          setUser(result);
+          setIsLogged(true);
+    
+          Alert.alert("Success", "User signed in successfully");
+          router.replace("/home");
+        } catch (error) {
+          Alert.alert("Error", error.message);
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
   return (
     <SafeAreaView className='bg-primary h-full'>
         <ScrollView>
@@ -50,6 +61,7 @@ const SignIn = () => {
                 />
 
                 <CustomButton title='Sign In' handlePress={submit} containerStyles='mt-7' isLoading={isSubmitting} />
+                {/* <CustomButton title='Sign Out' handlePress={deleteSession} containerStyles='mt-7' isLoading={isSubmitting} /> */}
                 <View className='justify-center pt-5 flex-row gap-2'>
                     <Text className='text-lg text-gray-100 font-pregular'>Don't have an account ?</Text>
                         <Link href='sign-up' className=' text-lg font-psemibold text-secondary'>Sign Up</Link>

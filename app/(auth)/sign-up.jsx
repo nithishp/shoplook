@@ -6,7 +6,7 @@ import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link, router } from 'expo-router'
 import {createUser} from '../../lib/appwrite'
-
+import { useGlobalContext } from "../../context/GlobalProvider";
 const SignUp = () => {
     const [form,setForm] = useState({
       username:'',
@@ -14,21 +14,25 @@ const SignUp = () => {
         password:''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const submit = async() =>{
-        if(!form.email || !form.password || !form.username){
-            Alert.alert('Error','Please fill all the fields')
+    const { setUser, setIsLogged } = useGlobalContext();
+    const submit = async () => {
+        if (form.username === "" || form.email === "" || form.password === "") {
+          Alert.alert("Error", "Please fill in all fields");
         }
-        setIsSubmitting(true)
+    
+        setIsSubmitting(true);
         try {
-        const result = await createUser(form.email,form.password,form.username)
-        router.replace('/home')
+          const result = await createUser(form.email, form.password, form.username);
+          setUser(result);
+          setIsLogged(true);
+    
+          router.replace("/home");
         } catch (error) {
-            Alert.alert('Error',error.message)
-            
-        }finally{
-            setIsSubmitting(false)
+          Alert.alert("Error", error.message);
+        } finally {
+          setIsSubmitting(false);
         }
-    }
+      };
   return (
     <SafeAreaView className='bg-primary h-full'>
         <ScrollView>
