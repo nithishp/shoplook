@@ -3,7 +3,7 @@ import React from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 
 
-const MapSearchBar = () => {
+const MapSearchBar = ({searchedLocation}) => {
   return (
     <View className = ''>
       <GooglePlacesAutocomplete
@@ -11,8 +11,7 @@ const MapSearchBar = () => {
       fetchDetails={true}
       enablePoweredByContainer={false}
       onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
+        searchedLocation(details?.geometry?.location)
       }}
       query={{
         key: 'AIzaSyDmmqLuITuWp8qfRIEmzJiZIlwE_6p7pXI',

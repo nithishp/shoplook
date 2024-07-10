@@ -27,7 +27,6 @@
       await refetch()
       setRefreshing(false);
     };
-    // console.log('home.jsx -> useAppwrite -> shops',shops)
     return (
       <View>
         <SafeAreaView className="bg-primary h-full">

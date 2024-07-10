@@ -29,7 +29,7 @@ const TabsLayout = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location)
+     
       setLocation(location.coords);
     })();
   }, []);
@@ -84,6 +84,19 @@ const TabsLayout = () => {
               
           )
         }}/>
+<Tabs.Screen name='MapView' options={{
+          title:"Map",
+          headerShown: false,
+          tabBarIcon:({color,focused})=>(
+              <TabIcon 
+                icon={icons.map}
+                color={color}
+                name ="Map"
+                focused={focused}
+              />
+              
+          )
+        }}/>
 
 <Tabs.Screen name='create' options={{
           title:"Create",
@@ -112,19 +125,6 @@ const TabsLayout = () => {
           )
         }}/>
 
-<Tabs.Screen name='MapView' options={{
-          title:"Map",
-          headerShown: false,
-          tabBarIcon:({color,focused})=>(
-              <TabIcon 
-                icon={icons.map}
-                color={color}
-                name ="Map"
-                focused={focused}
-              />
-              
-          )
-        }}/>
       </Tabs>
     </UserLocationContext.Provider>
     </>

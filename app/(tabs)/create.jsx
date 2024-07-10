@@ -61,7 +61,7 @@ const Create = () => {
   };
 
   const submit = async() => {
-    console.log('create.jsx -> formData after clicking submit ->',form)
+    
     if(form.name === "" ||  form.location === "" || form.image ===""){
       return Alert.alert('Please fill all the fields') 
     }

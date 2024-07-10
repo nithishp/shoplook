@@ -10,7 +10,6 @@ const ShopCard = ({
     creator: { username, avatar },
   },
 }) => {
-// console.log('ShopCard.jsx->image',image)
 
   return (
     <View className=" flex-col items-center px-4 mb-14">

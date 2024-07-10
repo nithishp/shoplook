@@ -30,7 +30,7 @@ const MapHeader = () => {
         </View>
       </View>
       <View className='mt-4'>
-      <MapSearchBar />
+      <MapSearchBar  searchedLocation={(location)=>console.log(location)}/>
 
       </View>
     </SafeAreaView>
